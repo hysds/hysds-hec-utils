@@ -45,7 +45,7 @@ TUNNEL_HOSTNAME="hfe1.nas.nasa.gov"
 URL="http://${TUNNEL_HOSTNAME}:5672"
 STDOUTERR=$( curl ${URL} 2>&1 )
 if [ $? -eq 0 ]; then
-    echo "[pass] mozart rabbitmq"
+    echo "[pass] mozart rabbitmq AMQP"
 else
     echo "# [fail] mozart rabbitmq ${URL}" 1>&2
     echo "${STDOUTERR}" 1>&2
@@ -55,7 +55,7 @@ fi
 URL="https://${TUNNEL_HOSTNAME}:15673"
 STDOUTERR=$( curl --insecure ${URL} 2>&1 )
 if [ $? -eq 0 ]; then
-    echo "[pass] mozart rabbitmq"
+    echo "[pass] mozart rabbitmq REST"
 else
     echo "# [fail] mozart rabbitmq ${URL}" 1>&2
     echo "${STDOUTERR}" 1>&2
