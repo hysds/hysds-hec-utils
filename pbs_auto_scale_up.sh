@@ -43,15 +43,15 @@ INTERVAL=60
 # ---------------------------------------------------------
 
 # the tool for rabbitmq query
-RABBITMQ_QUEUE_INFO_PY=$( which "rabbitmq_queue_info.py" )
+RABBITMQ_QUEUE_PY=$( which "rabbitmq_queue.py" )
 if [ ${?} -ne 0 ]; then
     echo "# rabbitmq_queue_info.py not in path" 1>&2
     break
 fi
 
 # check if rabbitmq tool file exists
-if [ ! -f "${RABBITMQ_QUEUE_INFO_PY}" ]; then
-    echo "No file ${RABBITMQ_QUEUE_INFO_PY} found." 1>&2
+if [ ! -f "${RABBITMQ_QUEUE_PY}" ]; then
+    echo "No file ${RABBITMQ_QUEUE_PY} found." 1>&2
     exit 1
 fi
 
@@ -75,7 +75,7 @@ while true; do
     echo "# PBS_RUNNING_QUEUED: ${PBS_RUNNING_QUEUED}"
 
     # get count of ready and unacked messages in rabbitmq for the one specific queue
-    TOKENS=$( "${RABBITMQ_QUEUE_INFO_PY}" --endpoint="${RABBITMQ_API_ENDPOINT}" --username="${RABBITMQ_USERNAME}" --passwd="${RABBITMQ_PASSWD}" --queue="${RABBITMQ_QUEUE}" )
+    TOKENS=$( "${RABBITMQ_QUEUE_PY}" --endpoint="${RABBITMQ_API_ENDPOINT}" --username="${RABBITMQ_USERNAME}" --passwd="${RABBITMQ_PASSWD}" --queue="${RABBITMQ_QUEUE}" )
     # rabbitmq_queue_info.py outputs to stdout: <queue name> <state> <messages_ready> <messages_unacknowledged>
     if [ ${?} -eq 0 ]; then
         IFS=" " read RABBITMQ_QUEUE RABBITMQ_STATE RABBITMQ_READY RABBITMQ_UNACKED <<< ${TOKENS}
@@ -84,7 +84,7 @@ while true; do
         echo "# RABBITMQ_READY: ${RABBITMQ_READY}"
         echo "# RABBITMQ_UNACKED: ${RABBITMQ_UNACKED}"
     else
-        echo "# unable to call '${RABBITMQ_QUEUE_INFO_PY}' to get count of ready and unacked messages in rabbitmq for queue" 1>&2
+        echo "# unable to call '${RABBITMQ_QUEUE_PY}' to get count of ready and unacked messages in rabbitmq for queue" 1>&2
         sleep 5
         break
     fi
