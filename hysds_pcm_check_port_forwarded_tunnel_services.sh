@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # -----------------------------------------------------
-# This script is used to test if all forward ports are accessible from Plieades back to HySDS PCM.
+# This script is used to test if all forward ports are accessible via tunnel
+# from Plieades back to HySDS PCM (in AWS).
 # Run this script from Pleiades headnode or compute node.
 # -----------------------------------------------------
 
@@ -37,7 +38,13 @@
 # RemoteForward hfe1.nas.nasa.gov:10025 factotum.mycluster.hysds.io:25
 # -----------------------------------------------------
 
+# -----------------------------------------------------
+# input settings
+
 TUNNEL_HOSTNAME="hfe1.nas.nasa.gov"
+
+# -----------------------------------------------------
+
 
 # ------ Mozart ------
 
