@@ -80,7 +80,8 @@ fi
 
 # mozart: redis for ES figaro
 URL="http://${TUNNEL_HOSTNAME}:6379"
-STDOUTERR=$( curl ${URL} 2>&1 )
+### STDOUTERR=$( curl ${URL} 2>&1 )
+STDOUTERR=$( wget --server-response --spider ${URL} 2>&1 )
 if [ $? -eq 0 ]; then
     echo "[pass] mozart redis for ES figaro"
 else
@@ -144,7 +145,8 @@ fi
 
 # metrics: redis for elasticsearch kibana
 URL="http://${TUNNEL_HOSTNAME}:36379"
-STDOUTERR=$( curl ${URL} 2>&1 )
+### STDOUTERR=$( curl ${URL} 2>&1 )
+STDOUTERR=$( wget --server-response --spider ${URL} 2>&1 )
 if [ $? -eq 0 ]; then
     echo "[pass] metrics redis for ES metrics"
 else
