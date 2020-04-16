@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -W group_list=s2037
+#PBS -l site=static_broadwell:nat=tpfe2
+#PBS -q hysds
+#PBS -l select=1:ncpus=28:model=bro
+#PBS -l min_walltime=6:00:00,max_walltime=24:00:00
+echo $UID >& tmp.txt
+DIR=$(dirname $0)
+echo $DIR
+cd $DIR
+sh job_worker_singularity.sh $PBS_JOBID
+
