@@ -4,9 +4,9 @@
 #PBS -q hysds
 #PBS -l select=1:ncpus=28:model=bro
 #PBS -l min_walltime=6:00:00,max_walltime=24:00:00
+#PBS -o /nobackupp12/lpan/logs/pbs_output
+#PBS -e /nobackupp12/lpan/logs/pbs_error
 echo $UID >& tmp.txt
-DIR=$(dirname $0)
-echo $DIR
-cd $DIR
+cd /home1/lpan/github/hysds-hec-utils/
 sh job_worker_singularity.sh $PBS_JOBID
 
