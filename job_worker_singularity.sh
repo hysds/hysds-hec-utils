@@ -31,5 +31,5 @@ trap kill_celery_worker EXIT
 
 echo "HYSDS_ROOT_WORK_DIR: $HYSDS_ROOT_WORK_DIR"
 echo "CELERY_JOB_WORKER_PID: $CELERY_JOB_WORKER_PID"
-python /home1/lpan/github/hysds/scripts/harikiri_pid.py  $HYSDS_ROOT_WORK_DIR -i 300 -c 60 -p $CELERY_JOB_WORKER_PID -l https://hfe1.nas.nasa.gov:8443/mozart/api/v0.1/
+python /home1/lpan/verdi/ops/hysds/scripts/harikiri_pid.py  $HYSDS_ROOT_WORK_DIR -i 300 -c 120 -p $CELERY_JOB_WORKER_PID -l https://hfe1.nas.nasa.gov:8443/mozart/api/v0.1/
 
