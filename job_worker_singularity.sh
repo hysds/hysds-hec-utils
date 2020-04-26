@@ -6,6 +6,9 @@ TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 export NOBACKUP="/nobackupp12/lpan"
+export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/cache/"
+echo "TMPDIR=${TMPDIR}"
+echo "df -h ${TMPDIR}"
 export HYSDS_ROOT_WORK_DIR="$NOBACKUP/worker/workdir/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
 mkdir -p $HYSDS_ROOT_WORK_DIR
 export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/datasets.json"
@@ -19,15 +22,19 @@ celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1
 #
 CELERY_JOB_WORKER_PID=$!
 
-function kill_celery_worker() {
+function cleanup() {
   echo "Caught SIGTERM signal. Killing $CELERY_JOB_WORKER_PID ..." 
   if kill -0 $CELERY_JOB_WORKER_PID
   then
     kill -TERM "$CELERY_JOB_WORKER_PID"
   fi
+
+  echo "TMPDIR=${TMPDIR}"
+  echo "df -h ${TMPDIR}"
+  rm -rf "$HYSDS_ROOT_CACHE_DIR"
 }
-trap kill_celery_worker SIGTERM
-trap kill_celery_worker EXIT
+trap cleanup SIGTERM
+trap cleanup EXIT
 
 echo "HYSDS_ROOT_WORK_DIR: $HYSDS_ROOT_WORK_DIR"
 echo "CELERY_JOB_WORKER_PID: $CELERY_JOB_WORKER_PID"
