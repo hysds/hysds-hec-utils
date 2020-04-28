@@ -6,7 +6,6 @@
 # Run this script continuously on the Pleiades head node.
 # Assumptions:
 # * "rabbitmq_queue.py" is in path
-# * "lustre_disk_cleanup.py" is in path
 # * Automatic scale-down is handled by harikiri-pid.py in each PBS worker job.
 # * PBS queue name is "hysds"
 # TODO: if the rabbitmq queue does not yet exists, create it by having worker connect to it or submitting jobs to it first.
@@ -50,36 +49,6 @@ PBS_SCRIPT="celery.pbs"
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
 INTERVAL=30
-
-# ---------------------------------------------------------
-# check lustre disk quota usage and cleanup if necessary
-# the tool for lustre disk cleanup
-LUSTRE_DISK_CLEANUP_PY=$( which "lustre_disk_cleanup.py" )
-if [ ${?} -ne 0 ]; then
-    echo "# lustre_disk_cleanup.py not in path" 1>&2
-    break
-fi
-
-# check if lustre disk cleanup tool file exists
-if [ ! -f "${LUSTRE_DISK_CLEANUP_PY}" ]; then
-    echo "No file ${LUSTRE_DISK_CLEANUP_PY} found." 1>&2
-    exit 1
-fi
-
-${LUSTRE_DISK_CLEANUP_PY} --work_dir=${WORKER_DIR} --threshold=${THRESHOLD} &
-
-LUSTRE_DISK_CLEANUP_PID=$!
-
-function kill_lustre_cleanup() {
-  echo "Caught SIGTERM signal. Killing $LUSTRE_DISK_CLEANUP_PID ..."
-  if kill -0 $LUSTRE_DISK_CLEANUP_PID
-  then
-    kill -TERM "$LUSTRE_DISK_CLEANUP_PID"
-  fi
-}
-trap kill_lustre_cleanup SIGTERM
-trap kill_lustre_cleanup EXIT
-
 
 # ---------------------------------------------------------
 
