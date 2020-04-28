@@ -6,9 +6,10 @@ TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 export NOBACKUP="/nobackupp12/lpan"
-export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/cache/"
+export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
+### export HYSDS_ROOT_CACHE_DIR="$NOBACKUP/worker/workdir/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
 echo "TMPDIR=${TMPDIR}"
-echo "df -h ${TMPDIR}"
+echo $(df -h ${TMPDIR})
 export HYSDS_ROOT_WORK_DIR="$NOBACKUP/worker/workdir/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
 mkdir -p $HYSDS_ROOT_WORK_DIR
 export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/datasets.json"
@@ -30,7 +31,7 @@ function cleanup() {
   fi
 
   echo "TMPDIR=${TMPDIR}"
-  echo "df -h ${TMPDIR}"
+  echo $(df -h ${TMPDIR})
   rm -rf "$HYSDS_ROOT_CACHE_DIR"
 }
 trap cleanup SIGTERM
