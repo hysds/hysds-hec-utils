@@ -1,0 +1,84 @@
+Host 198.9.4.11
+    KexAlgorithms +diffie-hellman-group1-sha1
+Host *
+    ServerAliveInterval 300
+    ServerAliveCountMax 2
+#Updated 20190322
+Host hfe1-tunnel
+
+Hostname  hfe1.nas.nasa.gov
+# ------ e-mozart ------
+# mozart: rabbitmq AMQP
+RemoteForward hfe1.nas.nasa.gov:5672 100.64.134.93:5672
+# mozart: rabbitmq REST
+RemoteForward hfe1.nas.nasa.gov:15672 100.64.134.93:15672
+# mozart: elasticsearch for figaro
+RemoteForward hfe1.nas.nasa.gov:9200 100.64.134.93:9200
+# mozart: redis for elasticsearch figaro
+RemoteForward hfe1.nas.nasa.gov:6379 100.64.134.93:6379
+# mozart: rest api
+RemoteForward hfe1.nas.nasa.gov:8443 100.64.134.93:443
+# ------ e-datasets ------
+# grq: elasticsearch for tosca
+RemoteForward hfe1.nas.nasa.gov:29200 100.64.134.117:9200
+# grq: rest api
+RemoteForward hfe1.nas.nasa.gov:28878 100.64.134.117:8878
+# ??? MAY NOT BE NEEDED ??
+# grq: ?????? 
+#RemoteForward hfe1.nas.nasa.gov:28888 100.64.134.117:8888
+# grq: tosca ??????
+#RemoteForward hfe1.nas.nasa.gov:28443 100.64.134.117:443
+# ------ e-metrics ------
+# metrics: redis for elasticsearch kibana
+RemoteForward hfe1.nas.nasa.gov:36379 100.64.134.205:6379
+# ------ e-factotum ------
+# email service
+RemoteForward hfe1.nas.nasa.gov:10025 100.64.134.247:25
+# github
+RemoteForward hfe1.nas.nasa.gov:28443 128.149.124.233:443
+#
+Host sfe
+        # Replace sfe3 with sfe1 or sfe2 if sfe3 is unavailable, and 
+        # public key authorization is set up on the SFE you want to switch to
+        HostName		sfe1.nas.nasa.gov
+
+Host sfe sfe?.nas.nasa.gov
+	Ciphers			aes128-ctr,aes192-ctr,aes256-ctr
+	ForwardAgent		no
+        KexAlgorithms 		diffie-hellman-group1-sha1
+	MACs			hmac-sha1
+        ServerAliveInterval     5m
+
+Host sfe sfe?.nas.nasa.gov dmzfs?.nas.nasa.gov sup*.nas.nasa.gov
+	LogLevel		info
+	ProxyCommand		none
+
+Host hfe hfe-last hfe.nas.nasa.gov hfe-last.nas.nasa.gov
+	HostKeyAlias		hfe1.nas.nasa.gov
+	ProxyCommand		ssh -oCompression=no sfe /usr/local/bin/ssh-balance %h
+
+Host pfe pfe-last pfe.nas.nasa.gov pfe-last.nas.nasa.gov
+	HostKeyAlias		pfe20.nas.nasa.gov
+	ProxyCommand		ssh -oCompression=no sfe /usr/local/bin/ssh-balance %h
+
+Host lfe lfe-last lfe.nas.nasa.gov lfe-last.nas.nasa.gov
+        HostKeyAlias            lfe5.nas.nasa.gov
+        ProxyCommand            ssh -oCompression=no sfe /usr/local/bin/ssh-balance %h
+
+Host lou lou-last lou.nas.nasa.gov lou-last.nas.nasa.gov
+        HostKeyAlias            lfe5.nas.nasa.gov
+        ProxyCommand            ssh -oCompression=no sfe /usr/local/bin/ssh-balance %h
+
+Host lou2 lou2-last lou2.nas.nasa.gov lou2-last.nas.nasa.gov
+        HostKeyAlias            lfe5.nas.nasa.gov
+        ProxyCommand            ssh -oCompression=no sfe /usr/local/bin/ssh-balance %h
+
+# Add additional hosts to the list below as needed
+Host *.nas.nasa.gov lou lou? lfe? pfe?? ?fe *-last mfe? hfe? hfe1-tunnel
+        ForwardAgent            yes       
+	HostbasedAuthentication	no
+	Protocol		2
+	ProxyCommand		ssh -oCompression=no sfe /usr/local/bin/ssh-proxy %h
+	ServerAliveInterval	5m
+	# Replace <NAS_login_name> with your NAS username
+	User			lpan
