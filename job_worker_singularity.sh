@@ -5,6 +5,8 @@ WORKER_ID="pleiades_worker.${PBS_JOBID}"
 TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
+export HYSDS_CELERY_CFG="/home1/lpan/verdi/ops/hysds/e_celeryconfig.py"
+export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export NOBACKUP="/nobackupp12/lpan"
 export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
 ### export HYSDS_ROOT_CACHE_DIR="$NOBACKUP/worker/workdir/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
@@ -12,7 +14,7 @@ echo "TMPDIR=${TMPDIR}"
 echo $(df -h ${TMPDIR})
 export HYSDS_ROOT_WORK_DIR="$NOBACKUP/worker/workdir/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
 mkdir -p $HYSDS_ROOT_WORK_DIR
-export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/datasets.json"
+export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/e_cluster_config/datasets.json"
 mkdir -p $NOBACKUP/worker/logs/$YEAR/$MONTH/$DAY/
 LOGFILE="$NOBACKUP/worker/logs/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID.log"
 cd $HYSDS_ROOT_WORK_DIR
