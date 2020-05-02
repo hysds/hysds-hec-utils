@@ -40,9 +40,6 @@ RABBITMQ_API_ENDPOINT="http://hfe1.nas.nasa.gov:15672"
 RABBITMQ_USERNAME="guest"
 RABBITMQ_PASSWD="guest"
 
-WORKER_DIR="/nobackupp12/lpan/worker/workdir/"
-THRESHOLD=10.0
-
 # the PBS script to qsub to the hysds queue
 PBS_SCRIPT="celery.pbs"
 
