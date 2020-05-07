@@ -8,40 +8,40 @@
 
 # .ssh/config:
 # -----------------------------------------------------
-# Hostname  hfe1.nas.nasa.gov
+# Hostname  tpfe2.nas.nasa.gov
 # # ------ mozart ------
 # # mozart: rabbitmq AMQP
-# RemoteForward hfe1.nas.nasa.gov:5672 mozart.mycluster.hysds.io:5672
+# RemoteForward tpfe2.nas.nasa.gov:5672 mozart.mycluster.hysds.io:5672
 # # mozart: rabbitmq REST
-# RemoteForward hfe1.nas.nasa.gov:15673 mozart.mycluster.hysds.io:15673
+# RemoteForward tpfe2.nas.nasa.gov:15673 mozart.mycluster.hysds.io:15673
 # # mozart: elasticsearch for figaro
-# RemoteForward hfe1.nas.nasa.gov:9200 mozart.mycluster.hysds.io:9200
+# RemoteForward tpfe2.nas.nasa.gov:9200 mozart.mycluster.hysds.io:9200
 # # mozart: redis for elasticsearch figaro
-# RemoteForward hfe1.nas.nasa.gov:6379 mozart.mycluster.hysds.io:6379
+# RemoteForward tpfe2.nas.nasa.gov:6379 mozart.mycluster.hysds.io:6379
 # # mozart: rest api
-# RemoteForward hfe1.nas.nasa.gov:8443 mozart.mycluster.hysds.io:443
+# RemoteForward tpfe2.nas.nasa.gov:8443 mozart.mycluster.hysds.io:443
 # # ------ datasets ------
 # # grq: elasticsearch for tosca
-# RemoteForward hfe1.nas.nasa.gov:29200 datasets.mycluster.hysds.io:9200
+# RemoteForward tpfe2.nas.nasa.gov:29200 datasets.mycluster.hysds.io:9200
 # # grq: rest api
-# RemoteForward hfe1.nas.nasa.gov:28878 datasets.mycluster.hysds.io:8878
+# RemoteForward tpfe2.nas.nasa.gov:28878 datasets.mycluster.hysds.io:8878
 # # ??? MAY NOT BE NEEDED ??
 # # grq: ?????? 
-# #RemoteForward hfe1.nas.nasa.gov:28888 datasets.mycluster.hysds.io:8888
+# #RemoteForward tpfe2.nas.nasa.gov:28888 datasets.mycluster.hysds.io:8888
 # # grq: tosca ??????
-# #RemoteForward hfe1.nas.nasa.gov:28443 datasets.mycluster.hysds.io:443
+# #RemoteForward tpfe2.nas.nasa.gov:28443 datasets.mycluster.hysds.io:443
 # # ------ metrics ------
 # # metrics: redis for elasticsearch kibana
-# RemoteForward hfe1.nas.nasa.gov:36379 metrics.mycluster.hysds.io:6379
+# RemoteForward tpfe2.nas.nasa.gov:36379 metrics.mycluster.hysds.io:6379
 # # ------ factotum ------
 # # email service
-# RemoteForward hfe1.nas.nasa.gov:10025 factotum.mycluster.hysds.io:25
+# RemoteForward tpfe2.nas.nasa.gov:10025 factotum.mycluster.hysds.io:25
 # -----------------------------------------------------
 
 # -----------------------------------------------------
 # input settings
 
-TUNNEL_HOSTNAME="hfe1.nas.nasa.gov"
+TUNNEL_HOSTNAME="tpfe2.nas.nasa.gov"
 
 # -----------------------------------------------------
 
@@ -60,6 +60,7 @@ fi
 
 # mozart: rabbitmq REST
 URL="https://${TUNNEL_HOSTNAME}:15673"
+### URL="http://${TUNNEL_HOSTNAME}:15672"
 STDOUTERR=$( curl --insecure ${URL} 2>&1 )
 if [ $? -eq 0 ]; then
     echo "[pass] mozart rabbitmq REST"
