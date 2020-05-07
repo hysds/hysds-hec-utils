@@ -18,10 +18,10 @@ export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/mamba_config/datasets.json"
 ### echo $(df -h ${TMPDIR})
 #
 # the top-level worker directory for each job worker
-WORKER_DIR="${NOBACKUP}/worker/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID/"
-HYSDS_ROOT_WORK_DIR="${WORKER_DIR}/work/"
+WORKER_DIR="${NOBACKUP}/worker/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID"
+export HYSDS_ROOT_WORK_DIR="${WORKER_DIR}/work/"
 mkdir -p ${HYSDS_ROOT_WORK_DIR}
-HYSDS_ROOT_CACHE_DIR="${WORKER_DIR}/cache/"
+export HYSDS_ROOT_CACHE_DIR="${WORKER_DIR}/cache/"
 mkdir -p ${HYSDS_ROOT_CACHE_DIR}
 LOGFILE="${WORKER_DIR}/$TIMESTAMP-$WORKER_ID.log"
 cd $HYSDS_ROOT_WORK_DIR
