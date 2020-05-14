@@ -47,6 +47,9 @@ PBS_SCRIPT="celery.pbs"
 ### INTERVAL=60
 INTERVAL=30
 
+# max number of pbs jobs (or max number of verdi's)
+MAX_PBS_JOBS=120
+
 # ---------------------------------------------------------
 
 # the tool for rabbitmq query
@@ -96,7 +99,7 @@ while true; do
         break
     fi
 
-    if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ]; then
+    if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
         echo "# ---> qsub one more job..."
         qsub -q hysds ${PBS_SCRIPT}
     fi
