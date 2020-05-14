@@ -62,7 +62,7 @@ PYMONITOREDRUNNER_CFG = {
         ### "hostname": "172.31.50.21",
         ### "hostname": "34.231.84.218",
         ### "hostname": "3.84.50.148",
-        "hostname": "tpfe2",
+        "hostname": "tpfe2.nas.nasa.gov",
         "port": 5672,
         "queue": "stdouterr"
     },
