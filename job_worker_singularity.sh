@@ -19,11 +19,13 @@ export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/mamba_config/datasets.json"
 #
 # the top-level worker directory for each job worker
 WORKER_DIR="${NOBACKUP}/worker/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID"
+LOG_DIR="${NOBACKUP}/worker/logs/$YEAR/$MONTH/$DAY/$TIMESTAMP-$WORKER_ID"
 export HYSDS_ROOT_WORK_DIR="${WORKER_DIR}/work/"
 mkdir -p ${HYSDS_ROOT_WORK_DIR}
 export HYSDS_ROOT_CACHE_DIR="${WORKER_DIR}/cache/"
 mkdir -p ${HYSDS_ROOT_CACHE_DIR}
-LOGFILE="${WORKER_DIR}/$TIMESTAMP-$WORKER_ID.log"
+mkdir -p ${LOG_DIR}
+LOGFILE="${LOG_DIR}/$TIMESTAMP-$WORKER_ID.log"
 cd $HYSDS_ROOT_WORK_DIR
 # ensure that job gets all 28 Broadwell cores
 export OMP_NUM_THREADS=28
