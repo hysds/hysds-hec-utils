@@ -31,14 +31,14 @@ BASE_NAME=$(basename "${BASH_SOURCE}")
 RABBITMQ_QUEUE="standard_product-s1gunw-topsapp-pleiades"
 #RABBITMQ_API_ENDPOINT="https://100.67.33.56:15673"
 ### RABBITMQ_API_ENDPOINT="https://hfe1.nas.nasa.gov:15673"
-# new Alex cluster
-### RABBITMQ_API_ENDPOINT="https://hfe1.nas.nasa.gov:15673"
-### RABBITMQ_USERNAME="hysdsops"
-### RABBITMQ_PASSWD="Y2FkNTllND"
+# new mamba cluster
+RABBITMQ_API_ENDPOINT="https://tpfe2.nas.nasa.gov:15673"
+RABBITMQ_USERNAME="hysdsops"
+RABBITMQ_PASSWD="Y2FkNTllND"
 # e-cluster
-RABBITMQ_API_ENDPOINT="http://hfe1.nas.nasa.gov:15672"
-RABBITMQ_USERNAME="guest"
-RABBITMQ_PASSWD="guest"
+### RABBITMQ_API_ENDPOINT="http://hfe1.nas.nasa.gov:15672"
+### RABBITMQ_USERNAME="guest"
+### RABBITMQ_PASSWD="guest"
 
 # the PBS script to qsub to the hysds queue
 PBS_SCRIPT="celery.pbs"
