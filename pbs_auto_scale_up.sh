@@ -41,7 +41,7 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 ### RABBITMQ_PASSWD="guest"
 
 # the PBS script to qsub to the hysds queue
-PBS_SCRIPT="celery.pbs"
+### PBS_SCRIPT="celery.pbs"
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
@@ -52,11 +52,21 @@ MAX_PBS_JOBS=120
 
 # ---------------------------------------------------------
 
+# force an input of pbs script, e.g., celery_s2037.pbs
+if [ $# -eq 0 ]
+  then
+    echo "# please provide a pbs script as input, e.g., celery_s2037.pbs"
+    exit 1
+fi
+
+PBS_SCRIPT=$1
+echo "PBS_SCRIPT: $PBS_SCRIPT"
+
 # the tool for rabbitmq query
 RABBITMQ_QUEUE_PY=$( which "rabbitmq_queue.py" )
 if [ ${?} -ne 0 ]; then
     echo "# rabbitmq_queue.py not in path" 1>&2
-    break
+    exit 1
 fi
 
 # check if rabbitmq tool file exists
