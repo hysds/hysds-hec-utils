@@ -40,8 +40,8 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 ### RABBITMQ_USERNAME="guest"
 ### RABBITMQ_PASSWD="guest"
 
-# the PBS script to qsub to the hysds queue
-### PBS_SCRIPT="celery.pbs"
+# the base of PBS script to qsub to the hysds queue
+PBS_SCRIPT="celery.pbs"
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
@@ -52,15 +52,34 @@ MAX_PBS_JOBS=120
 
 # ---------------------------------------------------------
 
-# force an input of pbs script, e.g., celery_s2037.pbs
+# force an input of pbs group list, e.g., s2037
 if [ $# -eq 0 ]
   then
-    echo "# please provide a pbs script as input, e.g., celery_s2037.pbs"
+    echo "# please provide a pbs group list as input, e.g., s2037"
     exit 1
 fi
 
-PBS_SCRIPT=$1
-echo "PBS_SCRIPT: $PBS_SCRIPT"
+GROUP_LIST=$1
+echo "# GROUP_LIST: ${GROUP_LIST}"
+
+# append group list to rabbitmq queue name
+RABBITMQ_QUEUE=${RABBITMQ_QUEUE}_${GROUP_LIST}
+echo "# RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}"
+
+# append group list to pbs script filename
+IFS='.' read -ra FNAME <<< "$PBS_SCRIPT"
+
+filename="${FNAME[0]}"
+ext="${FNAME[1]}"
+
+PBS_SCRIPT=${filename}_${GROUP_LIST}.${ext}
+echo "# PBS_SCRIPT: ${PBS_SCRIPT}"
+
+# check if rabbitmq tool file exists
+if [ ! -f "${PBS_SCRIPT}" ]; then
+    echo "No file ${PBS_SCRIPT} found." 1>&2
+    exit 1
+fi
 
 # the tool for rabbitmq query
 RABBITMQ_QUEUE_PY=$( which "rabbitmq_queue.py" )
