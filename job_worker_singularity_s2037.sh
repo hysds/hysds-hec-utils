@@ -5,6 +5,7 @@ WORKER_ID="pleiades_worker.${PBS_JOBID}"
 TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
+export SANDBOX_DIR="/nobackupp12/lpan/PGE/container-aria-jpl_ariamh_develop_singularity-2020-07-10-1bbb06d33ce6.simg"
 ### export HYSDS_CELERY_CFG="/home1/lpan/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export HYSDS_CELERY_CFG="/home1/lpan/verdi/ops/hysds/mamba_celeryconfig.py"
@@ -46,6 +47,7 @@ function cleanup() {
   ### echo $(df -h ${TMPDIR})
 
   # clean up after the pbs job is done
+  echo "removing WORKER_DIR: $WORKER_DIR"
   rm -rf "$WORKER_DIR"
 }
 trap cleanup SIGTERM
