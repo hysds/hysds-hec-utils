@@ -48,7 +48,7 @@ PBS_SCRIPT="celery.pbs"
 INTERVAL=30
 
 # max number of pbs jobs (or max number of verdi's)
-MAX_PBS_JOBS=120
+MAX_PBS_JOBS=140
 
 # ---------------------------------------------------------
 
@@ -101,9 +101,16 @@ while true; do
     # get count of running and queue jobs
     TOKENS=$( qstat -q hysds | awk '{if ($1=="hysds") print $6 " " $7}' )
     if [ ${?} -eq 0 ]; then
-        IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
-        echo "# PBS_RUNNING: ${PBS_RUNNING}"
-        echo "# PBS_QUEUED: ${PBS_QUEUED}"
+        # qstat can still have exit code 0 while erroring out (e.g., timeout)
+        if [-n "${TOKENS}"]; then
+          IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
+          echo "# PBS_RUNNING: ${PBS_RUNNING}"
+          echo "# PBS_QUEUED: ${PBS_QUEUED}"
+        else
+          echo "# unable to get count of running and queue jobs" 1>&2
+          sleep 5
+          break
+        fi
     else
         echo "# unable to get count of running and queue jobs" 1>&2
         sleep 5
@@ -111,7 +118,7 @@ while true; do
     fi
 
     PBS_RUNNING_QUEUED=$((PBS_RUNNING + PBS_QUEUED))
-    echo "# PBS_RUNNING_QUEUED: ${PBS_RUNNING_QUEUED}"
+    echo "# PBS_RUNNING+QUEUED: ${PBS_RUNNING_QUEUED}"
 
     # get count of ready and unacked messages in rabbitmq for the one specific queue
     TOKENS=$( "${RABBITMQ_QUEUE_PY}" --endpoint="${RABBITMQ_API_ENDPOINT}" --username="${RABBITMQ_USERNAME}" --passwd="${RABBITMQ_PASSWD}" --queue="${RABBITMQ_QUEUE}" )
