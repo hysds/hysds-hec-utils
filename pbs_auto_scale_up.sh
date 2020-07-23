@@ -102,7 +102,7 @@ while true; do
     TOKENS=$( qstat -q hysds | awk '{if ($1=="hysds") print $6 " " $7}' )
     if [ ${?} -eq 0 ]; then
         # qstat can still have exit code 0 while erroring out (e.g., timeout)
-        if [-n "${TOKENS}"]; then
+        if [ -n "${TOKENS}" ]; then
           IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
           echo "# PBS_RUNNING: ${PBS_RUNNING}"
           echo "# PBS_QUEUED: ${PBS_QUEUED}"
