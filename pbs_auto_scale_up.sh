@@ -45,7 +45,7 @@ PBS_SCRIPT="celery.pbs"
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
-INTERVAL=30
+INTERVAL=20
 
 # max number of pbs jobs (or max number of verdi's)
 MAX_PBS_JOBS=140
@@ -104,6 +104,7 @@ while true; do
         # qstat can still have exit code 0 while erroring out (e.g., timeout)
         if [ -n "${TOKENS}" ]; then
           IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
+          echo "# INTERVAL: ${INTERVAL}"
           echo "# PBS_RUNNING: ${PBS_RUNNING}"
           echo "# PBS_QUEUED: ${PBS_QUEUED}"
         else
