@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -W group_list=s2310
+#PBS -l site=static_broadwell:nat=tpfe2
+#PBS -q hysds
+#PBS -l select=1:ncpus=28:model=bro
+#PBS -l min_walltime=10:00:00,max_walltime=20:00:00
+#PBS -o /nobackupp12/esi_sar/logs/pbs_output
+#PBS -e /nobackupp12/esi_sar/logs/pbs_error
+echo $UID >& tmp.txt
+cd /home4/esi_sar/github/hysds-hec-utils/
+sh job_worker_singularity_s2310.sh $PBS_JOBID
+
