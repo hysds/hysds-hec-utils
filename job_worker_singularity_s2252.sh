@@ -5,14 +5,15 @@ WORKER_ID="pleiades_worker.${PBS_JOBID}"
 TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
-export SANDBOX_DIR="/nobackupp12/lpan/PGE/container-aria-jpl_ariamh_develop_singularity-2020-07-10-1bbb06d33ce6.simg"
-### export HYSDS_CELERY_CFG="/home1/lpan/verdi/ops/hysds/e_celeryconfig.py"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-07-10-1bbb06d33ce6.simg"
+export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-09-06-68ec04f70f8b.simg"
+### export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
-export HYSDS_CELERY_CFG="/home1/lpan/verdi/ops/hysds/mamba_celeryconfig.py"
+export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
 export HYSDS_CELERY_CFG_MODULE="mamba_celeryconfig"
-export NOBACKUP="/nobackupp12/lpan/s2252"
-### export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/e_cluster_config/datasets.json"
-export HYSDS_DATASETS_CFG="/home1/lpan/verdi/etc/mamba_config/datasets.json"
+export NOBACKUP="/nobackupp12/esi_sar/s2252"
+### export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/e_cluster_config/datasets.json"
+export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/mamba_config/datasets.json"
 #
 ### export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
 ### echo "TMPDIR=${TMPDIR}"
@@ -32,7 +33,7 @@ cd $HYSDS_ROOT_WORK_DIR
 export OMP_NUM_THREADS=28
 env > $LOGFILE
 # run celery job worker & # in background, but save its PID
-celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1gunw-topsapp-pleiades_s2252 -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
+/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1gunw-topsapp-pleiades_s2252 -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
 #
 CELERY_JOB_WORKER_PID=$!
 
@@ -55,6 +56,6 @@ trap cleanup EXIT
 
 echo "WORKER_DIR: $WORKER_DIR"
 echo "CELERY_JOB_WORKER_PID: $CELERY_JOB_WORKER_PID"
-python /home1/lpan/verdi/ops/hysds/scripts/harikiri_pid.py  $HYSDS_ROOT_WORK_DIR -i 300 -c 120 -p $CELERY_JOB_WORKER_PID -l https://tpfe2.nas.nasa.gov:8443/mozart/api/v0.1/
+/home4/esi_sar/verdi/bin/python /home4/esi_sar/verdi/ops/hysds/scripts/harikiri_pid.py  $HYSDS_ROOT_WORK_DIR -i 300 -c 120 -p $CELERY_JOB_WORKER_PID -l https://tpfe2.nas.nasa.gov:8443/mozart/api/v0.1/
 
 
