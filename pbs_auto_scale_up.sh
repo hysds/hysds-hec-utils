@@ -55,7 +55,7 @@ MAX_PBS_JOBS=140
 # force an input of pbs group list, e.g., s2037
 if [ $# -eq 0 ]
   then
-    echo "# please provide a pbs group list as input, e.g., s2037 or s2252"
+    echo "# please provide a pbs group list as input, e.g., s2037, s2252, or s2310"
     exit 1
 fi
 
