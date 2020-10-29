@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 # pbs init stuff
+# to get singularity
+source /usr/local/lib/global.profile
+module use /nasa/modulefiles/testing
+module load singularity
 export PBS_JOBID=$1
 WORKER_ID="pleiades_worker.${PBS_JOBID}"
 TOKENS=$(date +"%Y %m %d")
 IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-07-10-1bbb06d33ce6.simg"
-export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-09-06-68ec04f70f8b.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-09-06-68ec04f70f8b.simg"
+export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-28-dd5c2be5cbd8.simg"
 ### export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
@@ -14,6 +19,9 @@ export HYSDS_CELERY_CFG_MODULE="mamba_celeryconfig"
 export NOBACKUP="/nobackupp12/esi_sar/s2310"
 ### export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/e_cluster_config/datasets.json"
 export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/mamba_config/datasets.json"
+#
+export VERDI_ROOT="/home4/esi_sar/verdi/"
+export DEM_ROOT="/nobackupp12/esi_sar/datasets/"
 #
 ### export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
 ### echo "TMPDIR=${TMPDIR}"
