@@ -32,3 +32,6 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
 
 . to get lustre quota
   lfs quota -u lpan /nobackupp12/
+
+. to run autoscaling in the background
+  pbs_auto_scale_up.sh s2037 50 > pbs_auto_scale_up-s2037_50.log 2>&1 &
