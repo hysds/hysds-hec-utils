@@ -55,12 +55,15 @@ MAX_PBS_JOBS=140
 # force an input of pbs group list, e.g., s2037
 if [ $# -eq 0 ]
   then
-    echo "# please provide a pbs group list as input, e.g., s2037, s2252, or s2310"
+    echo "# please provide a pbs group list as input, e.g., s2037, s2252, or s2310 and max pbs jobs for that group list"
     exit 1
 fi
 
 GROUP_LIST=$1
 echo "# GROUP_LIST: ${GROUP_LIST}"
+
+MAX_PBS_JOBS=$2
+echo "# MAX_PBS_JOBS: ${MAX_PBS_JOBS}"
 
 # append group list to rabbitmq queue name
 RABBITMQ_QUEUE=${RABBITMQ_QUEUE}_${GROUP_LIST}
