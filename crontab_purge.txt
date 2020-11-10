@@ -1,0 +1,1 @@
+0 3 * * * /home4/esi_sar/github/hysds-hec-utils/purge_old_files.sh
