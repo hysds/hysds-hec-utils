@@ -1,1 +1,3 @@
-* * * * * /home4/esi_sar/github/hysds-hec-utils/qsub_a_verdi_job.sh
+* * * * * /home4/esi_sar/github/hysds-hec-utils/qsub_a_verdi_job.sh s2037
+* * * * * /home4/esi_sar/github/hysds-hec-utils/qsub_a_verdi_job.sh s2252
+* * * * * /home4/esi_sar/github/hysds-hec-utils/qsub_a_verdi_job.sh s2310
