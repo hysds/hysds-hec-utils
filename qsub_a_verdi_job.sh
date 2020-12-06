@@ -44,8 +44,6 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 PBS_SCRIPT="celery.pbs"
 
 # query interval to rabbitmq, in seconds
-### INTERVAL=60
-INTERVAL=20
 
 # max number of pbs jobs (or max number of verdi's)
 MAX_PBS_JOBS=140
@@ -97,54 +95,50 @@ if [ ! -f "${RABBITMQ_QUEUE_PY}" ]; then
     exit 1
 fi
 
-while true; do
-    TIMESTAMP=$(date +%Y%m%dT%H%M%S)
-    echo "$(date) checking qstat on hysds queue..."
+TIMESTAMP=$(date +%Y%m%dT%H%M%S)
+echo "$(date) checking qstat on hysds queue..."
 
-    # get count of running and queue jobs
-    TOKENS=$( qstat -q hysds | awk '{if ($1=="hysds") print $6 " " $7}' )
-    if [ ${?} -eq 0 ]; then
-        # qstat can still have exit code 0 while erroring out (e.g., timeout)
-        if [ -n "${TOKENS}" ]; then
-          IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
-          echo "# INTERVAL: ${INTERVAL}"
-          echo "# PBS_RUNNING: ${PBS_RUNNING}"
-          echo "# PBS_QUEUED: ${PBS_QUEUED}"
-        else
-          echo "# unable to get count of running and queue jobs" 1>&2
-          sleep 5
-          break
-        fi
+# get count of running and queue jobs
+TOKENS=$( qstat -q hysds | awk '{if ($1=="hysds") print $6 " " $7}' )
+if [ ${?} -eq 0 ]; then
+    # qstat can still have exit code 0 while erroring out (e.g., timeout)
+    if [ -n "${TOKENS}" ]; then
+      IFS=" " read PBS_RUNNING PBS_QUEUED <<< ${TOKENS}
+      echo "# PBS_RUNNING: ${PBS_RUNNING}"
+      echo "# PBS_QUEUED: ${PBS_QUEUED}"
     else
-        echo "# unable to get count of running and queue jobs" 1>&2
-        sleep 5
-        break
+      echo "# unable to get count of running and queue jobs" 1>&2
+      sleep 5
+      exit 1
     fi
+else
+    echo "# unable to get count of running and queue jobs" 1>&2
+    sleep 5
+    exit 1
+fi
 
-    PBS_RUNNING_QUEUED=$((PBS_RUNNING + PBS_QUEUED))
-    echo "# PBS_RUNNING+QUEUED: ${PBS_RUNNING_QUEUED}"
+PBS_RUNNING_QUEUED=$((PBS_RUNNING + PBS_QUEUED))
+echo "# PBS_RUNNING+QUEUED: ${PBS_RUNNING_QUEUED}"
 
-    # get count of ready and unacked messages in rabbitmq for the one specific queue
-    TOKENS=$( "${RABBITMQ_QUEUE_PY}" --endpoint="${RABBITMQ_API_ENDPOINT}" --username="${RABBITMQ_USERNAME}" --passwd="${RABBITMQ_PASSWD}" --queue="${RABBITMQ_QUEUE}" )
-    # rabbitmq_queue.py outputs to stdout: <queue name> <state> <messages_ready> <messages_unacknowledged>
-    if [ ${?} -eq 0 ]; then
-        IFS=" " read RABBITMQ_QUEUE RABBITMQ_STATE RABBITMQ_READY RABBITMQ_UNACKED <<< ${TOKENS}
-        echo "# RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}"
-        echo "# RABBITMQ_STATE: ${RABBITMQ_STATE}"
-        echo "# RABBITMQ_READY: ${RABBITMQ_READY}"
-        echo "# RABBITMQ_UNACKED: ${RABBITMQ_UNACKED}"
-    else
-        echo "# unable to call '${RABBITMQ_QUEUE_PY}' to get count of ready and unacked messages in rabbitmq for queue" 1>&2
-        sleep 5
-        break
-    fi
+# get count of ready and unacked messages in rabbitmq for the one specific queue
+TOKENS=$( "${RABBITMQ_QUEUE_PY}" --endpoint="${RABBITMQ_API_ENDPOINT}" --username="${RABBITMQ_USERNAME}" --passwd="${RABBITMQ_PASSWD}" --queue="${RABBITMQ_QUEUE}" )
+# rabbitmq_queue.py outputs to stdout: <queue name> <state> <messages_ready> <messages_unacknowledged>
+if [ ${?} -eq 0 ]; then
+    IFS=" " read RABBITMQ_QUEUE RABBITMQ_STATE RABBITMQ_READY RABBITMQ_UNACKED <<< ${TOKENS}
+    echo "# RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}"
+    echo "# RABBITMQ_STATE: ${RABBITMQ_STATE}"
+    echo "# RABBITMQ_READY: ${RABBITMQ_READY}"
+    echo "# RABBITMQ_UNACKED: ${RABBITMQ_UNACKED}"
+else
+    echo "# unable to call '${RABBITMQ_QUEUE_PY}' to get count of ready and unacked messages in rabbitmq for queue" 1>&2
+    sleep 5
+    exit 1
+fi
 
-    if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
-        echo "# ---> qsub one more job..."
-        qsub -q hysds ${PBS_SCRIPT}
-    fi
+if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
+    echo "# ---> qsub one more job..."
+    qsub -q hysds ${PBS_SCRIPT}
+fi
 
-    echo ""
+echo ""
 
-    sleep ${INTERVAL}
-done
