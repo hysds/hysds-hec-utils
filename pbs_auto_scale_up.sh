@@ -55,7 +55,7 @@ MAX_PBS_JOBS=140
 # force an input of pbs group list, e.g., s2037
 if [ $# -eq 0 ]
   then
-    echo "# please provide a pbs group list as input, e.g., s2037, s2252, or s2310 and max pbs jobs for that group list"
+    echo "# please provide a pbs group list (e.g., s2037, s2252, or s2310) and the max pbs jobs (e.g., 140)"
     exit 1
 fi
 
@@ -75,7 +75,7 @@ IFS='.' read -ra FNAME <<< "$PBS_SCRIPT"
 filename="${FNAME[0]}"
 ext="${FNAME[1]}"
 
-PBS_SCRIPT=${filename}_${GROUP_LIST}.${ext}
+PBS_SCRIPT=~/github/hysds-hec-utils/${filename}_${GROUP_LIST}.${ext}
 echo "# PBS_SCRIPT: ${PBS_SCRIPT}"
 
 # check if rabbitmq tool file exists
