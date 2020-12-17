@@ -1,7 +1,7 @@
 #!/bin/bash
 LOGFILE="log_auto_scaling.log"
-### LAUNCH="sh pbs_auto_scale_up.sh s2037"
-LAUNCH="sh count.sh"
+LAUNCH="sh pbs_auto_scale_up.sh s2037 140"
+### LAUNCH="sh count.sh"
 
 trap 'cleanup' SIGTERM
 trap 'cleanup' EXIT
@@ -31,6 +31,7 @@ do
         # Launch command and keep track of the PID
         ${LAUNCH} >> "${LOGFILE}" 2>&1 &
         PID=$!
+        echo "launched child process PID: $PID"
     fi
 
     sleep 5
