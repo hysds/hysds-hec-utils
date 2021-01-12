@@ -1,5 +1,5 @@
 #!/bin/bash
-LOGFILE="log_auto_scaling.log"
+LOGFILE="log_auto_scaling_s2037.log"
 LAUNCH="sh pbs_auto_scale_up.sh s2037 140"
 ### LAUNCH="sh count.sh"
 
