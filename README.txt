@@ -35,3 +35,8 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
 
 . to run autoscaling in the background
   pbs_auto_scale_up.sh s2037 50 > pbs_auto_scale_up-s2037_50.log 2>&1 &
+  or use
+  auto_scaling_launcher.sh
+
+. to start cron job for disk purging
+  crontab < crontab_purge.txt
