@@ -40,3 +40,14 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
 
 . to start cron job for disk purging
   crontab < crontab_purge.txt
+
+. to get the gid of a job
+  echo `qstat -f 10639466.pbspl1 | grep egroup | awk '{print $3}'`
+
+. new way of qsub using different gid as input:
+  sh celery_job.sh s2310
+  (The shell script celery_job.sh will "pass" the gid to celery_job.pbs.
+   celery_job.pbs calls 581_job_worker_singularity.sh, which takes $PBS_JOBID
+   as input. 581_job_worker_singularity.sh gets the gid by calling
+   qstat using $PBS_JOBID as input. In this way, the entire job submission
+   is parameterized and there is no need to hardcode gid in any script.)
