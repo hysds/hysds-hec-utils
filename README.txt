@@ -51,3 +51,68 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
    as input. 581_job_worker_singularity.sh gets the gid by calling
    qstat using $PBS_JOBID as input. In this way, the entire job submission
    is parameterized and there is no need to hardcode gid in any script.)
+
+. how to parameterize group id in pbs script
+  . write a shell script at takes gid as input ($1)
+    and calls the pbs script passing in gid with the -W option
+    qsub -W group_list=$1 celery_job.pbs
+    example:
+    -----------
+    esi_sar@tpfe2:~/github/hysds-hec-utils> cat celery_job.sh
+    #!/bin/bash
+    # force an input of pbs group list, e.g., s2037
+    if [ $# -eq 0 ]
+      then
+        echo "# please provide a pbs group list (e.g., s2037, s2252, or s2310)"
+        exit 1
+    fi
+
+    qsub -W group_list=$1 celery_job.pbs
+    -----------
+
+    to run it: sh celery_job.sh s2252
+
+  . celery_job.pbs is as usual except with the following line taken out
+    #PBS -W group_list=s2252
+    example:
+    -----------
+    esi_sar@tpfe2:~/github/hysds-hec-utils> cat celery_job.pbs
+    #!/bin/bash
+    #PBS -l site=static_broadwell:nat=tpfe2
+    #PBS -q hysds
+    #PBS -l select=1:ncpus=28:model=bro
+    #PBS -l min_walltime=12:10:00,max_walltime=24:10:00
+    #PBS -o /nobackupp12/esi_sar/logs/581_pbs_output
+    #PBS -e /nobackupp12/esi_sar/logs/581_pbs_error
+    echo $UID >& tmp.txt
+    cd /home4/esi_sar/github/hysds-hec-utils/
+    sh 581_job_worker_singularity.sh $PBS_JOBID
+    -----------
+
+  . the actual shell script that launches the celery job
+    needs the group id for sub-directory creation and queue name.
+    here is how to get gid from qstat:
+    export PBS_JOBID=$1
+    echo "PBS_JOBID=${PBS_JOBID}"
+    export gid=`qstat -f $PBS_JOBID | grep egroup | awk '{print $3}'`
+    echo "gid=${gid}"
+
+    example:
+    -----------
+    esi_sar@tpfe2:~/github/hysds-hec-utils> cat 581_job_worker_singularity.sh
+    #!/usr/bin/env bash
+    # pbs init stuff
+    # to get singularity
+    source /usr/local/lib/global.profile
+    module use /nasa/modulefiles/testing
+    module load singularity
+    export PBS_JOBID=$1
+    echo "PBS_JOBID=${PBS_JOBID}"
+    export gid=`qstat -f $PBS_JOBID | grep egroup | awk '{print $3}'`
+    echo "gid=${gid}"
+    WORKER_ID="pleiades_worker.${PBS_JOBID}"
+    TOKENS=$(date +"%Y %m %d")
+    IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
+    TIMESTAMP=$(date +%Y%m%dT%H%M%S)
+    ... ...
+    -----------
