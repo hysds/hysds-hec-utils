@@ -116,3 +116,13 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
     TIMESTAMP=$(date +%Y%m%dT%H%M%S)
     ... ...
     -----------
+
+. how to run
+  . to qsub using the s2252 gid:
+    sh celery_job.sh s2252
+
+  . currently in celery_job.sh, this shell script is called:
+    sh 581_job_worker_singularity.sh $PBS_JOBID
+
+  . can modify job_worker_singularity_s2252.sh
+    based on 581_job_worker_singularity.sh
