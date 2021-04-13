@@ -42,6 +42,8 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 
 # the base of PBS script to qsub to the hysds queue
 PBS_SCRIPT="celery.pbs"
+# pending testing
+PBS_SCRIPT="celery_job.sh"
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
@@ -76,13 +78,15 @@ filename="${FNAME[0]}"
 ext="${FNAME[1]}"
 
 PBS_SCRIPT=~/github/hysds-hec-utils/${filename}_${GROUP_LIST}.${ext}
+### pending testing
+# PBS_SCRIPT=~/github/hysds-hec-utils/${filename}.${ext} ${GROUP_LIST}
 echo "# PBS_SCRIPT: ${PBS_SCRIPT}"
 
 # check if rabbitmq tool file exists
-if [ ! -f "${PBS_SCRIPT}" ]; then
-    echo "No file ${PBS_SCRIPT} found." 1>&2
-    exit 1
-fi
+#if [ ! -f "${PBS_SCRIPT}" ]; then
+#    echo "No file ${PBS_SCRIPT} found." 1>&2
+#    exit 1
+#fi
 
 # the tool for rabbitmq query
 RABBITMQ_QUEUE_PY=$( which "rabbitmq_queue.py" )
@@ -142,6 +146,8 @@ while true; do
     if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
         echo "# ---> qsub one more job..."
         qsub -q hysds ${PBS_SCRIPT}
+        # pending testing
+        # ${PBS_SCRIPT}
     fi
 
     echo ""
