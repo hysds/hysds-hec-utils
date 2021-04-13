@@ -118,11 +118,15 @@ s2037    hecc          2020    42688.761   151.09    28254.000   -14434.761  279
     -----------
 
 . how to run
-  . to qsub using the s2252 gid:
+  . to qsub using the s2252 gid for one job:
     sh celery_job.sh s2252
 
-  . currently in celery_job.sh, this shell script is called:
-    sh 581_job_worker_singularity.sh $PBS_JOBID
+  . for autoscaling, need to modify the input args
+    sh auto_scaling_launcher.sh
 
-  . can modify job_worker_singularity_s2252.sh
-    based on 581_job_worker_singularity.sh
+  . need to modify and test (where pending testing are)
+    sh pbs_auto_scale_up.sh
+
+  . currently in celery_job.pbs, this shell script is called:
+    sh job_worker_singularity.sh $PBS_JOBID
+
