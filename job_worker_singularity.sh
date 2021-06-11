@@ -14,8 +14,18 @@ IFS=" " read YEAR MONTH DAY <<< ${TOKENS}
 TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-07-10-1bbb06d33ce6.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-09-06-68ec04f70f8b.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-27-aa1f68a8113e.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-28-dd5c2be5cbd8.simg"
-export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-11-10-a7e7db057756.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-11-10-a7e7db057756.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446-581_singularity-2021-01-12-2c90bb667a25.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446-581_singularity-2021-01-26-c85dc73aaac4.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446-581_singularity-2021-02-04-78671950ecab.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446-581_singularity-2021-02-05-707a1c66ae9c.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-20-cf0c4cbd1daf.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-22-906205ab81d4.simg"
+### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-24-f63ec640e860.simg"
+export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-05-04-135055c6e661.simg"
+#
 ### export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
@@ -45,7 +55,7 @@ cd $HYSDS_ROOT_WORK_DIR
 export OMP_NUM_THREADS=28
 env > $LOGFILE
 # run celery job worker & # in background, but save its PID
-/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1gunw-topsapp-pleiades_$gid -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
+/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q ondemand-standard_product-s1gunw-topsapp_pge-pleiades_$gid -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
 #
 CELERY_JOB_WORKER_PID=$!
 
