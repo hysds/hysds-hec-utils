@@ -41,7 +41,7 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 ### RABBITMQ_PASSWD="guest"
 
 # the base of PBS script to qsub to the hysds queue
-PBS_SCRIPT="celery_job.sh"
+PBS_SCRIPT="celery_job.sh "
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
