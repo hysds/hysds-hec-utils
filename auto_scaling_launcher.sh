@@ -1,7 +1,16 @@
 #!/bin/bash
-LOGFILE="log_auto_scaling_s2037.log"
-LAUNCH="sh pbs_auto_scale_up.sh s2037 140"
-### LAUNCH="sh count.sh"
+LOGFILE="log_auto_scaling_s2252.log"
+LAUNCH="sh pbs_auto_scale_up.sh s2037 25"
+#LAUNCH="sh count.sh"
+
+# # force an input of pbs group list, e.g., s2037
+#if [ $# -eq 0 ]
+#  then
+#    echo "# please provide a pbs group list (e.g., s2037, s2252, or s2310) and the max pbs jobs (e.g., 140)"
+#    exit 1
+#fi
+#LOGFILE="log_auto_scaling_${1}.log"
+#LAUNCH="sh pbs_auto_scale_up.sh ${1} 100"
 
 trap 'cleanup' SIGTERM
 trap 'cleanup' EXIT
