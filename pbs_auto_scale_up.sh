@@ -28,7 +28,7 @@ BASE_NAME=$(basename "${BASH_SOURCE}")
 # input settings
 
 # rabbitmq endpoint
-RABBITMQ_QUEUE="standard_product-s1gunw-topsapp-pleiades"
+RABBITMQ_QUEUE="ondemand-standard_product-s1gunw-topsapp_pge-pleiades"
 #RABBITMQ_API_ENDPOINT="https://100.67.33.56:15673"
 ### RABBITMQ_API_ENDPOINT="https://hfe1.nas.nasa.gov:15673"
 # new mamba cluster
@@ -41,13 +41,11 @@ RABBITMQ_PASSWD="Y2FkNTllND"
 ### RABBITMQ_PASSWD="guest"
 
 # the base of PBS script to qsub to the hysds queue
-PBS_SCRIPT="celery.pbs"
-# pending testing
 PBS_SCRIPT="celery_job.sh"
 
 # query interval to rabbitmq, in seconds
 ### INTERVAL=60
-INTERVAL=20
+INTERVAL=10
 
 # max number of pbs jobs (or max number of verdi's)
 MAX_PBS_JOBS=140
@@ -64,7 +62,10 @@ fi
 GROUP_LIST=$1
 echo "# GROUP_LIST: ${GROUP_LIST}"
 
-MAX_PBS_JOBS=$2
+if [ $2 ]
+   then
+     MAX_PBS_JOBS=$2
+fi
 echo "# MAX_PBS_JOBS: ${MAX_PBS_JOBS}"
 
 # append group list to rabbitmq queue name
@@ -77,9 +78,7 @@ IFS='.' read -ra FNAME <<< "$PBS_SCRIPT"
 filename="${FNAME[0]}"
 ext="${FNAME[1]}"
 
-PBS_SCRIPT=~/github/hysds-hec-utils/${filename}_${GROUP_LIST}.${ext}
-### pending testing
-# PBS_SCRIPT=~/github/hysds-hec-utils/${filename}.${ext} ${GROUP_LIST}
+PBS_SCRIPT="/usr/bin/sh /home4/esi_sar/github/hysds-hec-utils/${filename}.${ext} ${GROUP_LIST}"
 echo "# PBS_SCRIPT: ${PBS_SCRIPT}"
 
 # check if rabbitmq tool file exists
@@ -145,9 +144,8 @@ while true; do
 
     if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
         echo "# ---> qsub one more job..."
-        qsub -q hysds ${PBS_SCRIPT}
-        # pending testing
-        # ${PBS_SCRIPT}
+        ### echo "running command ${PBS_SCRIPT}"
+        ${PBS_SCRIPT}
     fi
 
     echo ""
