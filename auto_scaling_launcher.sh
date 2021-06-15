@@ -1,6 +1,6 @@
 #!/bin/bash
-LOGFILE="log_auto_scaling_s2252.log"
-LAUNCH="sh pbs_auto_scale_up.sh s2037 25"
+LOGFILE="log_auto_scaling_s2037.log"
+LAUNCH="sh pbs_auto_scale_up.sh s2037 130"
 #LAUNCH="sh count.sh"
 
 # # force an input of pbs group list, e.g., s2037
