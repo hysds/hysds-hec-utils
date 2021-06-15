@@ -7,6 +7,10 @@ module load singularity
 export PBS_JOBID=$1
 echo "PBS_JOBID=${PBS_JOBID}"
 export gid=`qstat -f $PBS_JOBID | grep egroup | awk '{print $3}'`
+# used just for creating the initial rabbitmq queue 
+### gid=s2037
+### gid=s2310
+### gid=s2252
 echo "gid=${gid}"
 WORKER_ID="pleiades_worker.${PBS_JOBID}"
 TOKENS=$(date +"%Y %m %d")
