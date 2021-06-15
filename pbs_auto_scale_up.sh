@@ -102,6 +102,7 @@ fi
 
 while true; do
     TIMESTAMP=$(date +%Y%m%dT%H%M%S)
+    echo "# MAX_PBS_JOBS: ${MAX_PBS_JOBS}"
     echo "$(date) checking qstat on hysds queue..."
 
     # get count of running and queue jobs
