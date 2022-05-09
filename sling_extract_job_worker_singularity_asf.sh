@@ -12,11 +12,11 @@ TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 export SANDBOX_DIR="/nobackupp19/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-15-ecdd26bb71b8.simg"
 export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
 export HYSDS_CELERY_CFG_MODULE="mamba_celeryconfig"
-export NOBACKUP="/nobackupp12/esi_sar/s2037"
+export NOBACKUP="/nobackupp19/esi_sar/s2037"
 export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/mamba_config/datasets.json"
 #
 export VERDI_ROOT="/home4/esi_sar/verdi/"
-export DEM_ROOT="/nobackupp12/esi_sar/datasets/"
+export DEM_ROOT="/nobackupp19/esi_sar/datasets/"
 #
 ### export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
 ### echo "TMPDIR=${TMPDIR}"
