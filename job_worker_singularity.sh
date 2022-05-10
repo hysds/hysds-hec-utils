@@ -4,6 +4,7 @@
 source /usr/local/lib/global.profile
 module use /nasa/modulefiles/testing
 module load singularity
+module load gcc/9.3
 export PBS_JOBID=$1
 echo "PBS_JOBID=${PBS_JOBID}"
 export gid=`qstat -f $PBS_JOBID | grep egroup | awk '{print $3}'`
@@ -28,18 +29,19 @@ TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-20-cf0c4cbd1daf.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-22-906205ab81d4.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-04-24-f63ec640e860.simg"
-export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-05-04-135055c6e661.simg"
+### export SANDBOX_DIR="/nobackupp19/esi_sar/PGE/container-aria-jpl_topsapp_pge_singularity_dev-2021-05-04-135055c6e661.simg"
+export SANDBOX_DIR="/nobackupp19/esi_sar/PGE/container-aria-jpl_ariamh_aria-446-581_singularity-2021-02-05-707a1c66ae9c.simg"
 #
 ### export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
 export HYSDS_CELERY_CFG_MODULE="mamba_celeryconfig"
-export NOBACKUP="/nobackupp12/esi_sar/$gid"
+export NOBACKUP="/nobackupp19/esi_sar/$gid"
 ### export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/e_cluster_config/datasets.json"
 export HYSDS_DATASETS_CFG="/home4/esi_sar/verdi/etc/mamba_config/datasets.json"
 #
 export VERDI_ROOT="/home4/esi_sar/verdi/"
-export DEM_ROOT="/nobackupp12/esi_sar/datasets/"
+export DEM_ROOT="/nobackupp19/esi_sar/datasets/"
 #
 ### export HYSDS_ROOT_CACHE_DIR="${TMPDIR}/"
 ### echo "TMPDIR=${TMPDIR}"

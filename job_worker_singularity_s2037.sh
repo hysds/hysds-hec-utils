@@ -13,7 +13,7 @@ TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_develop_singularity-2020-09-06-68ec04f70f8b.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-27-aa1f68a8113e.simg"
 ### export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-10-28-dd5c2be5cbd8.simg"
-export SANDBOX_DIR="/nobackupp12/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-11-10-a7e7db057756.simg"
+export SANDBOX_DIR="/nobackupp19/esi_sar/PGE/container-aria-jpl_ariamh_aria-446_singularity-2020-11-10-a7e7db057756.simg"
 ### export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/e_celeryconfig.py"
 ### export HYSDS_CELERY_CFG_MODULE="e_celeryconfig"
 export HYSDS_CELERY_CFG="/home4/esi_sar/verdi/ops/hysds/mamba_celeryconfig.py"
@@ -43,7 +43,8 @@ cd $HYSDS_ROOT_WORK_DIR
 export OMP_NUM_THREADS=28
 env > $LOGFILE
 # run celery job worker & # in background, but save its PID
-/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1gunw-topsapp-pleiades_s2037 -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
+#/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q standard_product-s1gunw-topsapp-pleiades_s2037 -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
+/home4/esi_sar/verdi/bin/celery worker --app=hysds --concurrency=1 --loglevel=INFO -Q ondemand-standard_product-s1gunw-topsapp-pleiades_s2037 -n $WORKER_ID -O fair --without-mingle --without-gossip --heartbeat-interval=60 >> $LOGFILE 2>&1 &
 #
 CELERY_JOB_WORKER_PID=$!
 
