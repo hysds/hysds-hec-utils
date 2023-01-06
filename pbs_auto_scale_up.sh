@@ -143,6 +143,7 @@ while true; do
         break
     fi
 
+    # if the number of PBS workers (queued+running) is less than total needed (PCM rabbitmq queued+running), then ask for more PBS worker nodes, but up to the max.
     if [ "${PBS_RUNNING_QUEUED}" -lt "$((RABBITMQ_READY+RABBITMQ_UNACKED))" ] && [ "${PBS_RUNNING_QUEUED}" -lt "${MAX_PBS_JOBS}" ]; then
         echo "# ---> qsub one more job..."
         ### echo "running command ${PBS_SCRIPT}"
